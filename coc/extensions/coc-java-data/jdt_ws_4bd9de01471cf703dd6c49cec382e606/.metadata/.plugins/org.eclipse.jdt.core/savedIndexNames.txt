@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+/home/poeticpotato/.config/coc/extensions/coc-java-data/jdt_ws_4bd9de01471cf703dd6c49cec382e606/.metadata/.plugins/org.eclipse.jdt.core
+4255022427.index
+3842426239.index
+1597067313.index
