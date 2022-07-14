@@ -28,7 +28,6 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-import copy
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -75,24 +74,34 @@ keys = [
     Key([mod], 'period', lazy.next_screen(), desc='Next monitor')
 ]
 
-groups = [Group(i) for i in "123456789"]
+group_names = [
+    "HOM",
+    "CHR",
+    "DEV",
+    "DOC",
+    "SC5",
+    "SC6",
+    "SC7"
+    ]
 
-for i in groups:
+groups = [Group(i) for i in group_names]
+
+for i, group in enumerate(groups, 1):
     keys.extend(
         [
             # mod1 + letter of group = switch to group
             Key(
                 [mod],
-                i.name,
-                lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
+                str(i),
+                lazy.group[group.name].toscreen(),
+                desc="Switch to group {}".format(group.name),
             ),
             # mod1 + shift + letter of group = switch to & move focused window to group
             Key(
                 [mod, "shift"],
-                i.name,
-                lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(i.name),
+                str(i),
+                lazy.window.togroup(group.name, switch_group=True),
+                desc="Switch to & move focused window to group {}".format(group.name),
             ),
             # Or, use below if you prefer not to switch to that group.
             # # mod1 + shift + letter of group = move focused window to group
@@ -119,7 +128,7 @@ layouts = [
 
 widget_defaults = dict(
     font='Ubuntu Nerd Font',
-    color='cccccc',
+    color='ebddbc',
     fontsize=15,
     padding=3
 )
@@ -164,13 +173,19 @@ def group_space(color, width=10):
 bar1 = bar.Bar(
             [
                 arrow_end(bar_groups[0], flip=True),
+                widget.TextBox(
+                    text="☔",
+                    fontsize=20,
+                    foreground=bar_groups[1],
+                    background=bar_groups[0],
+                    ),
                 widget.GroupBox(
                     highlight_method='block',
                     hide_unused=False, 
                     inactive="999999",
                     max_chars=100,
                     active=widget_defaults["color"],
-                    visible_groups=['1','2','3','4'],
+                    visible_groups=group_names[0:4],
                     background=bar_groups[0]),
                 widget.Prompt(
                     font='Ubuntu Nerd Font',
@@ -183,7 +198,7 @@ bar1 = bar.Bar(
                     background=bar_groups[1],
                     width=bar.CALCULATED,
                     foreground="444444",
-                    empty_group_string="[Alt + Enter]"),
+                    empty_group_string=""),
                 group_space(bar_groups[1], width=14),
                 arrow_end(bar_groups[1]),
                 widget.Spacer(),
@@ -219,80 +234,50 @@ bar1 = bar.Bar(
         )
 bar2 = bar.Bar(
             [
-                widget.TextBox(
-                    text=' ❰',
-                    fontsize=45,
-                    foreground=bar_groups[0],
-                    background=bar_colors[0],
-                    padding =-14
-                    ),
+                arrow_end(bar_groups[0], flip=True),
                 widget.GroupBox(
                     highlight_method='block',
                     hide_unused=False, 
                     inactive="999999",
+                    max_chars=100,
                     active=widget_defaults["color"],
-                    visible_groups=['5','6','7'],
+                    visible_groups=group_names[4:7],
                     background=bar_groups[0]),
-                widget.TextBox(
-                    text='❱ ',
-                    fontsize=60,
-                    foreground=bar_groups[0],
-                    background=bar_groups[1],
-                    padding=-20
-                    ),
+                widget.Prompt(
+                    font='Ubuntu Nerd Font',
+                    foreground=widget_defaults["color"],
+                    padding=8, 
+                    background=bar_groups[0],
+                    prompt='|   '),
+                arrow_end(bar_groups[0], bar_groups[1]),
                 widget.WindowName(
                     background=bar_groups[1],
                     width=bar.CALCULATED,
                     foreground="444444",
-                    max_chars=20,
-                    empty_group_string="[Alt + Enter]"),
-                widget.Spacer(
-                    background=bar_groups[1],
-                    length=14),
-                widget.TextBox(
-                    text='❱ ',
-                    fontsize=45,
-                    foreground=bar_groups[1],
-                    padding =-14
-                    ),
+                    empty_group_string=""),
+                group_space(bar_groups[1], width=14),
+                arrow_end(bar_groups[1]),
                 widget.Spacer(),
                 widget.TextBox(
                     text="\"Victory belongs to the most tenacious\"",
                     foreground=widget_defaults["color"],
                     width=290
                     ),
-                widget.TextBox(
-                    text=' ▲',
-                    fontsize=80,
-                    foreground=bar_groups[3],
-                    padding = -20
-                    ),
-                widget.Spacer(
-                    background=bar_groups[3],
-                    length=10),
+                slice_end(bar_groups[3]),
+                group_space(bar_groups[3]),
                 widget.Clock(
                     format="%Y-%m-%d %a %I:%M %p", 
                     background=bar_groups[3],
                     foreground=widget_defaults["color"],
                     #foreground="170312",
                     padding = 7),
-                widget.TextBox(
-                    text=' ▲',
-                    fontsize=80,
-                    foreground=bar_groups[4],
-                    background=bar_groups[3],
-                    padding = -20
-                    ),
-                widget.Spacer(
-                    background=bar_groups[4],
-                    length=10),
+                slice_end(bar_groups[4], bar_groups[3]),
+                group_space(bar_groups[4]),
                 widget.QuickExit(
                     default_text="POeticPotatoes",
                     foreground="444444",
                     background=bar_groups[4],),
-                widget.Spacer(
-                    background=bar_groups[4],
-                    length=10),
+                group_space(bar_groups[4])
             ],
             26,
             # border_width=[4, 0, 0, 0],  # Draw top and bottom borders
