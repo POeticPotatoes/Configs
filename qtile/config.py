@@ -129,15 +129,41 @@ extension_defaults = widget_defaults.copy()
 # bar_colors = ['222222', '839788', "EEE0CB", "BAA898"]
 bar_colors = ['222222', '23395B', "8EA8C3", "CBF7ED"]
 bar_groups = [bar_colors[1], bar_colors[2], bar_colors[3], bar_colors[1], bar_colors[2]]
+
+def arrow_end(color, bg=bar_colors[0], flip=False):
+    if flip:
+        return widget.TextBox(
+            text=' ❰',
+            fontsize=45,
+            foreground=color,
+            background=bg,
+            padding =-14
+            )
+    return widget.TextBox(
+        text='❱ ',
+        fontsize=60,
+        foreground=color,
+        background=bg,
+        padding=-20
+        )
+
+def slice_end(color, bg=bar_colors[0]):
+    return widget.TextBox(
+        text='  ▲',
+        fontsize=80,
+        foreground=color,
+        background=bg,
+        padding = -48
+        )
+
+def group_space(color, width=10):
+    return widget.Spacer(
+        background=color,
+        length=width)
+
 bar1 = bar.Bar(
             [
-                widget.TextBox(
-                    text=' ❰',
-                    fontsize=45,
-                    foreground=bar_groups[0],
-                    background=bar_colors[0],
-                    padding =-14
-                    ),
+                arrow_end(bar_groups[0], flip=True),
                 widget.GroupBox(
                     highlight_method='block',
                     hide_unused=False, 
@@ -152,37 +178,17 @@ bar1 = bar.Bar(
                     padding=8, 
                     background=bar_groups[0],
                     prompt='|   '),
-                widget.TextBox(
-                    text='❱ ',
-                    fontsize=60,
-                    foreground=bar_groups[0],
-                    background=bar_groups[1],
-                    padding=-20
-                    ),
+                arrow_end(bar_groups[0], bar_groups[1]),
                 widget.WindowName(
                     background=bar_groups[1],
                     width=bar.CALCULATED,
                     foreground="444444",
                     empty_group_string="[Alt + Enter]"),
-                widget.Spacer(
-                    background=bar_groups[1],
-                    length=14),
-                widget.TextBox(
-                    text='❱ ',
-                    fontsize=45,
-                    foreground=bar_groups[1],
-                    padding =-14
-                    ),
+                group_space(bar_groups[1], width=14),
+                arrow_end(bar_groups[1]),
                 widget.Spacer(),
-                widget.TextBox(
-                    text=' ▲',
-                    fontsize=80,
-                    foreground=bar_groups[2],
-                    padding = -20
-                    ),
-                widget.Spacer(
-                    background=bar_groups[2],
-                    length=10),
+                slice_end(bar_groups[2]),
+                group_space(bar_groups[2]),
                 widget.TextBox(
                     text="Current Task: OStep Virtual Memory",
                     background=bar_groups[2],
@@ -190,39 +196,21 @@ bar1 = bar.Bar(
                     width=bar.CALCULATED,
                     #foreground="170312",
                     ),
-                widget.TextBox(
-                    text=' ▲',
-                    fontsize=80,
-                    foreground=bar_groups[3],
-                    background=bar_groups[2],
-                    padding = -20
-                    ),
-                widget.Spacer(
-                    background=bar_groups[3],
-                    length=10),
+                slice_end(bar_groups[3], bar_groups[2]),
+                group_space(bar_groups[3]),
                 widget.Clock(
                     format="%Y-%m-%d %a %I:%M %p", 
                     background=bar_groups[3],
                     foreground=widget_defaults["color"],
                     #foreground="170312",
                     padding = 7),
-                widget.TextBox(
-                    text=' ▲',
-                    fontsize=80,
-                    foreground=bar_groups[4],
-                    background=bar_groups[3],
-                    padding = -20
-                    ),
-                widget.Spacer(
-                    background=bar_groups[4],
-                    length=10),
+                slice_end(bar_groups[4], bar_groups[3]),
+                group_space(bar_groups[4]),
                 widget.QuickExit(
                     default_text="POeticPotatoes",
                     foreground="444444",
                     background=bar_groups[4],),
-                widget.Spacer(
-                    background=bar_groups[4],
-                    length=10),
+                group_space(bar_groups[4])
             ],
             26,
             # border_width=[4, 0, 0, 0],  # Draw top and bottom borders
