@@ -11,10 +11,14 @@
 // ==/UserScript==
 
 // Note: If there is a timetable clash, text will not appear red with this script enabled.
-
-// Step 1: Install the tampermonkey extension
+ 
+// Step 1: Install the tampermonkey browser extension
 // Step 2: Create a new script and paste this ENTIRE file into the editor
 // Step 3: Save the file. Enjoy!
+
+// Disclaimer: This script does not collect any data about the user or notify me in any way 
+//             that you are using it (you can examine the code yourself).
+
 
 GM_addStyle ( `
     body, div, .site-footer{
