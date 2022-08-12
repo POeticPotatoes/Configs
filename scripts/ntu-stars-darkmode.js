@@ -26,9 +26,6 @@ GM_addStyle ( `
         font-family: sans-serif;
         color: #fff !important;
     }
-    font {
-        color: #fff !important;
-    }
     td {
         border: 1px solid #555 !important;
         background-color: #202226 !important;
@@ -43,3 +40,16 @@ GM_addStyle ( `
         color: #24a7ed !important;
     }
 ` );
+
+
+window.addEventListener('load', function() {
+    const fonts = document.getElementsByTagName('font');
+
+    for (var i=0; i<fonts.length; i++) {
+        const font = fonts[i];
+        const color = window.getComputedStyle(font).getPropertyValue('color');
+        if (color == 'rgb(0, 0, 0)') {
+            font.style.color = "white";
+        }
+    }
+}, false);
