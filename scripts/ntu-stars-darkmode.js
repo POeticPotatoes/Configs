@@ -11,6 +11,7 @@
 // ==/UserScript==
 
 // Note: If there is a timetable clash, text will not appear red with this script enabled.
+// EDIT: Red text now shows up properly!! :)
  
 // Step 1: Install the tampermonkey browser extension
 // Step 2: Create a new script and paste this ENTIRE file into the editor
