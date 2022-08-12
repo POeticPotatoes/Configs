@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0.0
 // @description  dark mode for NTU Star!
-// @author       POeticPotatoes (Check me out on Github!)
+// @author       POeticPotatoes (Follow me on Github! https://github.com/POeticPotatoes)
 // @match        https://wish.wis.ntu.edu.sg/pls/webexe/AUS_STARS*
 // @icon         https://static.vecteezy.com/system/resources/previews/002/387/838/original/calendar-icon-flat-style-isolated-on-white-background-free-vector.jpg
 // @grant        GM_addStyle
