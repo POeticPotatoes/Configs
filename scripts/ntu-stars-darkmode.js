@@ -33,7 +33,6 @@ GM_addStyle ( `
     .site-header__body{
         display: none !important;
     }
-    .site-h
     input {
         background-color:#3d6599 !important;
     }
