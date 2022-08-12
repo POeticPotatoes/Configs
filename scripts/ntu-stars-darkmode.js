@@ -22,7 +22,7 @@
 
 GM_addStyle ( `
     body, div, .site-footer{
-        background-color: #202226 !important;
+        background-image: url("https://media.istockphoto.com/photos/stars-at-night-sky-picture-id498478219?b=1&k=20&m=498478219&s=170667a&w=0&h=60uBDjVUQSF8ZJjbUN3QWanv08QZLiRgAHhbSZ-RNRc=") !important;
         font-family: sans-serif;
         color: #fff !important;
     }
@@ -30,9 +30,10 @@ GM_addStyle ( `
         border: 1px solid #555 !important;
         background-color: #202226 !important;
     }
-    .site-logo{
+    .site-header__body{
         display: none !important;
     }
+    .site-h
     input {
         background-color:#3d6599 !important;
     }
@@ -40,7 +41,6 @@ GM_addStyle ( `
         color: #24a7ed !important;
     }
 ` );
-
 
 window.addEventListener('load', function() {
     const fonts = document.getElementsByTagName('font');
