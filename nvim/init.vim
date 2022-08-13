@@ -14,7 +14,9 @@ set softtabstop=4
 set statusline+=%F
 set relativenumber
 set number
-let g:mkdp_auto_start = 0
+let g:mkdp_auto_start = 1
+let g:mkdp_auto_close = 0
+let g:mkdp_theme = 'dark'
 let NERDTreeShowLineNumbers=1
 
 " Everforest: remove if not using
@@ -23,9 +25,10 @@ let NERDTreeShowLineNumbers=1
 " let g:everforest_better_performance = 1
 
 call plug#begin("~/.vim/plugged")
+" Plug 'davidgranstrom/nvim-markdown-preview'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ryanoasis/vim-devicons'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }

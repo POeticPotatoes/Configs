@@ -127,7 +127,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='Ubuntu Nerd Font',
+    font='Adobe Utopia',
     color='ebddbc',
     fontsize=15,
     padding=3
@@ -198,6 +198,7 @@ bar1 = bar.Bar(
                     background=bar_groups[1],
                     width=bar.CALCULATED,
                     foreground="444444",
+                    max_chars=50,
                     empty_group_string=""),
                 group_space(bar_groups[1], width=14),
                 arrow_end(bar_groups[1]),
@@ -205,7 +206,7 @@ bar1 = bar.Bar(
                 slice_end(bar_groups[2]),
                 group_space(bar_groups[2]),
                 widget.TextBox(
-                    text="Current Task: OStep Virtual Memory",
+                    text="Current Task: Resume Update",
                     background=bar_groups[2],
                     foreground="444444",
                     width=bar.CALCULATED,
@@ -254,13 +255,14 @@ bar2 = bar.Bar(
                     background=bar_groups[1],
                     width=bar.CALCULATED,
                     foreground="444444",
+                    max_chars=15,
                     empty_group_string=""),
                 group_space(bar_groups[1], width=14),
                 arrow_end(bar_groups[1]),
                 widget.Spacer(),
                 widget.TextBox(
                     text="\"Victory belongs to the most tenacious\"",
-                    foreground=widget_defaults["color"],
+                    foreground="ffffff",
                     width=290
                     ),
                 slice_end(bar_groups[3]),
