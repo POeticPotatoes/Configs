@@ -40,11 +40,6 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTa
 autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
 autocmd FileType nerdtree setlocal relativenumber
 
-" Autobrackets!
-autocmd BufEnter * if &ft =~ 'cpp\|c\|java' | 
-            \ inoremap { {<CR>}<Esc>ko |
-            \ else | inoremap { {}<left> | endif
-
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ CheckBackspace() ? "\<TAB>" :
@@ -57,11 +52,11 @@ function! CheckBackspace() abort
 endfunction
 
 " Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+" if has('nvim')
+"   inoremap <silent><expr> <c-space> coc#refresh()
+" else
+"   inoremap <silent><expr> <c-@> coc#refresh()
+" endif
 
 set autoread
 autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
@@ -72,3 +67,20 @@ lua <<END
   require('plugins')
   require('lualine').setup()
 END
+
+" Convenient mappings
+" autocmd BufEnter * if &ft =~ 'cpp\|c\|java' | 
+"             \ inoremap { {<CR>}<Esc>ko |
+"             \ else | inoremap { {}<left> | endif
+autocmd BufEnter * if &ft =~ 'markdown' | 
+            \ inoremap __ \_\_<lt>ins>()<lt>/ins>\_\_<Esc>/()<Enter>a |
+            \ else | inoremap __ | endif | echo 'Underlined'
+inoremap { {}<left>
+inoremap {<Esc> {<Esc>
+inoremap {<Enter> {<CR>}<Esc>ko
+inoremap $$ $$<left>
+nnoremap <silent> <Enter> :MarkdownPreview<cr>
+nnoremap <silent> <Esc> :noh<cr>
+nnoremap <silent> <Space><Space> :source ~/.config/nvim/init.vim<cr> | echo 'Reloaded config.'
+autocmd FileType markdown inoremap <img <lt>br><lt>img src="" style="width:auto;display:block;margin:auto"><lt>br> <Esc>?""<Enter>a
+
