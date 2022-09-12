@@ -1,4 +1,3 @@
-
 set showmatch
 set ignorecase
 set hlsearch
@@ -13,6 +12,7 @@ set shiftwidth=4
 set softtabstop=4
 set statusline+=%F
 set relativenumber
+set shell=bash\ -l
 set number
 let g:mkdp_auto_start = 0
 let g:mkdp_auto_close = 0
@@ -86,7 +86,7 @@ function Terminal()
     let g:working_dir = expand('%:h')
     rightbelow sb
     terminal
-    call feedkeys("GAsource ~/.bashrc\<Enter>cd ".g:working_dir."\<Enter>clear\<Enter>")
+    call feedkeys("acd ".g:working_dir."\<Enter>clear\<Enter>")
 endfunction
 
 function Compile()
@@ -96,15 +96,17 @@ function Compile()
 endfunction
 
 function DoMappings()
+    silent! unmap <lt>img
+    silent! unmap :q<Enter>
+    silent! unmap <C-c>
     if &ft =~ 'markdown'
         inoremap <img <lt>br><lt>img src="" style="width:auto;display:block;margin:auto"><lt>br> <Esc>?""<Enter>a
         inoremap __ \_\_<lt>ins>()<lt>/ins>\_\_<Esc>/()<Enter>a
-    else
-        silent! unmap <lt>img
     endif
     if &ft =~ 'cpp'
         nnoremap <C-c> :call Compile()<cr>
-    else 
-        nnoremap <C-c> <C-c>
+    endif
+    if &ft == ''
+        nnoremap :q<Enter>aclear<Enter>exit<Enter>
     endif
 endfunction
