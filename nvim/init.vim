@@ -16,8 +16,6 @@ set relativenumber
 set shell=bash\ -l
 set number
 
-colorscheme  onehalfdark
-
 " MarkdownPreview settings
 let g:mkdp_auto_start = 0
 let g:mkdp_auto_close = 0
@@ -56,10 +54,13 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 call plug#end()
 
+colorscheme  tokyonight
 
-" Notification after file change
+" trigger `autoread` when files changes on disk
 autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
-\ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+" notification after file change
+autocmd FileChangedShellPost *
+  \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
 lua <<END
   require('plugins')
