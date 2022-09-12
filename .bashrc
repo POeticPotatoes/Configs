@@ -9,7 +9,7 @@ compile()
     set -- "${1}" "${2%.cpp}"
     g++ -std=c++17 -Wshadow -Wall -o "${2}.out" "${2}.cpp" -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
     echo Compiled: ${2}.out
-    if [ uname != "Linux" ]; then
+    if [[ "$OS" = *"Darwin"* ]]; then
         echo "Ptweh! What's this, a mac user!?"
         rm -r "${2}.out.dSYM"
     fi
@@ -29,7 +29,7 @@ fast()
 {
     set -- "${1%.cpp}"
     g++ -std=c++17 -Wshadow -Wall -o "${1}.out" "${1}.cpp"
-    if [ uname != "Linux" ]; then
+    if [[ "$OS" = *"Darwin"* ]]; then
         echo "Ptweh! What's this, a mac user!?"
         rm -r "${2}.out.dSYM"
     fi
@@ -47,7 +47,7 @@ cowread()
 
 repo()
 {
-    if [ uname != "Linux" ]; then
+    if [[ "$OS" = *"Darwin"* ]]; then
         echo "Bleaugh! Weird mac syntax..."
         open https://github.com/POeticPotatoes/${1}
         return
@@ -60,3 +60,5 @@ solution()
     set -- "${1%.cpp}"
     printf "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n}" > ${1}.cpp
 }
+
+export OS=`uname`
