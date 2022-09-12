@@ -8,11 +8,11 @@ compile()
     set -- "${1}" "${@: -1}"
     set -- "${1}" "${2%.cpp}"
     g++ -std=c++17 -Wshadow -Wall -o "${2}.out" "${2}.cpp" -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
-    if [ uname == "Linux" ]; then
+    echo Compiled: ${2}.out
+    if [ uname != "Linux" ]; then
         echo "Ptweh! What's this, a mac user!?"
         rm -r "${2}.out.dSYM"
     fi
-    echo Compiled: ${2}.out
     while getopts ":a" opt; do
       case $opt in
         a)
@@ -49,7 +49,7 @@ repo()
 {
     if [ uname != "Linux" ]; then
         echo "Bleaugh! Weird mac syntax..."
-        open https://github.com/POeticPotatoes${1}
+        open https://github.com/POeticPotatoes/${1}
         return
     fi
     xdg-open https://github.com/POeticPotatoes/${1}
