@@ -1,4 +1,4 @@
-set nocompatible
+
 set showmatch
 set ignorecase
 set hlsearch
@@ -69,18 +69,42 @@ lua <<END
 END
 
 " Convenient mappings
-" autocmd BufEnter * if &ft =~ 'cpp\|c\|java' | 
-"             \ inoremap { {<CR>}<Esc>ko |
-"             \ else | inoremap { {}<left> | endif
-autocmd BufEnter * if &ft =~ 'markdown' | 
-            \ inoremap __ \_\_<lt>ins>()<lt>/ins>\_\_<Esc>/()<Enter>a |
-            \ else | inoremap __ | endif | echo 'Underlined'
 inoremap { {}<left>
 inoremap {<Esc> {<Esc>
 inoremap {<Enter> {<CR>}<Esc>ko
 inoremap $$ $$<left>
-nnoremap <silent> <Enter> :MarkdownPreview<cr>
 nnoremap <silent> <Esc> :noh<cr>
 nnoremap <silent> <Space><Space> :source ~/.config/nvim/init.vim<cr> | echo 'Reloaded config.'
-autocmd FileType markdown inoremap <img <lt>br><lt>img src="" style="width:auto;display:block;margin:auto"><lt>br> <Esc>?""<Enter>a
+nnoremap <C-t> :call Terminal()<cr> |
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-w> <C-\><C-n><C-w>
+command Mdp MarkdownPreview
+autocmd FileType markdown 
+autocmd BufEnter * call DoMappings()
 
+function Terminal() 
+    let g:working_dir = expand('%:h')
+    rightbelow sb
+    terminal
+    call feedkeys("GAsource ~/.bashrc\<Enter>cd ".g:working_dir."\<Enter>clear\<Enter>")
+endfunction
+
+function Compile()
+    let g:working_file = expand("%:t")
+    call Terminal()
+    call feedkeys("compile -a ".g:working_file)
+endfunction
+
+function DoMappings()
+    if &ft =~ 'markdown'
+        inoremap <img <lt>br><lt>img src="" style="width:auto;display:block;margin:auto"><lt>br> <Esc>?""<Enter>a
+        inoremap __ \_\_<lt>ins>()<lt>/ins>\_\_<Esc>/()<Enter>a
+    else
+        silent! unmap <lt>img
+    endif
+    if &ft =~ 'cpp'
+        nnoremap <C-c> :call Compile()<cr>
+    else 
+        nnoremap <C-c> <C-c>
+    endif
+endfunction
