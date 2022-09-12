@@ -1,4 +1,5 @@
 set showmatch
+set autoread
 set ignorecase
 set hlsearch
 set wildmode=longest, list
@@ -14,26 +15,16 @@ set statusline+=%F
 set relativenumber
 set shell=bash\ -l
 set number
-let g:mkdp_auto_start = 0
-let g:mkdp_auto_close = 0
-let g:mkdp_theme = 'dark'
-let NERDTreeShowLineNumbers=1
-
-call plug#begin("~/.vim/plugged")
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ryanoasis/vim-devicons'
-Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
-Plug 'mfussenegger/nvim-jdtls'
-Plug 'nvim-lualine/lualine.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'sonph/onehalf', { 'rtp': 'vim' }
-call plug#end()
 
 colorscheme  onehalfdark
 
+" MarkdownPreview settings
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 0
+let g:mkdp_theme = 'dark'
+
+" NERDTree settings
+let NERDTreeShowLineNumbers=1
 autocmd VimEnter * if !filereadable(@%) | if argc() == 1 && isdirectory(argv()[0]) |
             \ execute 'edit  ' . argv()[0] . '/README.md' | execute 'NERDTree' argv()[0] |  else | NERDTree | endif | wincmd p | endif
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
@@ -51,16 +42,23 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <c-space> to trigger completion.
-" if has('nvim')
-"   inoremap <silent><expr> <c-space> coc#refresh()
-" else
-"   inoremap <silent><expr> <c-@> coc#refresh()
-" endif
+" Plugged programs
+call plug#begin("~/.vim/plugged")
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'scrooloose/nerdtree'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ryanoasis/vim-devicons'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'mfussenegger/nvim-jdtls'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+call plug#end()
 
-set autoread
+
+" Notification after file change
 autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
-" notification after file change
 \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
 lua <<END
@@ -78,10 +76,18 @@ nnoremap <silent> <Space><Space> :source ~/.config/nvim/init.vim<cr> | echo 'Rel
 nnoremap <C-t> :call Terminal()<cr> |
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-w> <C-\><C-n><C-w>
+
+" Commands for specific actions
 command Mdp MarkdownPreview
+command Terminal call Terminal()
+command Compile call Compile()
+command ReloadMappings call DoMappings()
+
 autocmd FileType markdown 
 autocmd BufEnter * call DoMappings()
+autocmd TermClose * if !v:event.status | exe 'bdelete! '..expand('<abuf>') | endif
 
+" Terminal that changes to the correct working directory
 function Terminal() 
     let g:working_dir = expand('%:h')
     rightbelow sb
@@ -89,12 +95,14 @@ function Terminal()
     call feedkeys("acd ".g:working_dir."\<Enter>clear\<Enter>")
 endfunction
 
+" Opens terminal and prepares to compile the current file
 function Compile()
     let g:working_file = expand("%:t")
     call Terminal()
     call feedkeys("compile -a ".g:working_file)
 endfunction
 
+" Remaps all keys for the current buffer
 function DoMappings()
     silent! unmap <lt>img
     silent! unmap :q<Enter>
