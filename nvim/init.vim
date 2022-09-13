@@ -77,6 +77,7 @@ nnoremap <silent> <Space><Space> :source ~/.config/nvim/init.vim<cr> | echo 'Rel
 nnoremap <C-t> :call Terminal()<cr> |
 tnoremap <Esc> <C-\><C-n>
 tnoremap <C-w> <C-\><C-n><C-w>
+nnoremap <C-c> :call Compile()<cr>
 
 " Commands for specific actions
 command Mdp MarkdownPreview
@@ -96,27 +97,27 @@ function Terminal()
     let g:working_dir = expand('%:h')
     rightbelow sb
     terminal
-    call feedkeys("acd ".g:working_dir."\<Enter>clear\<Enter>")
+    call feedkeys("asource ~/.bashrc\<Enter>cd ".g:working_dir."\<Enter>clear\<Enter>")
 endfunction
 
 " Opens terminal and prepares to compile the current file
 function Compile()
+    if &ft != 'cpp'
+        echo "Non-cpp files cannot be compiled"
+        return
+    endif
     let g:working_file = expand("%:t")
     call Terminal()
-    call feedkeys("compile -a ".g:working_file)
+    call feedkeys("compile -a ".g:working_file."\<Enter>")
 endfunction
 
 " Remaps all keys for the current buffer
 function DoMappings()
     silent! unmap <lt>img
     silent! unmap :q<Enter>
-    silent! unmap <C-c>
     if &ft =~ 'markdown'
         inoremap <img <lt>br><lt>img src="" style="width:auto;display:block;margin:auto"><lt>br> <Esc>?""<Enter>a
         inoremap __ \_\_<lt>ins>()<lt>/ins>\_\_<Esc>/()<Enter>a
-    endif
-    if &ft =~ 'cpp'
-        nnoremap <C-c> :call Compile()<cr>
     endif
     if &ft == ''
         nnoremap :q<Enter>aclear<Enter>exit<Enter>

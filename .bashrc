@@ -3,6 +3,11 @@ custominit()
     ./scripts/init.sh
 }
 
+dotnetbuilder() 
+{
+    ~/scripts/cbuilder.sh
+}
+
 compile()
 {
     set -- "${1}" "${@: -1}"
@@ -57,8 +62,25 @@ repo()
 
 solution()
 {
+    template="#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n}"
     set -- "${1%.cpp}"
-    printf "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n}" > ${1}.cpp
+    if [[ "$OS" = *"Darwin"* ]]; then
+        # template="#include \"/Users/poeticpotato/Desktop/Work/cpp/bits.h\"\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n}"
+        echo "Yo dawg, I saw you using an inferior OS so i fixed your imports."
+    fi
+    printf "$template" > ${1}.cpp
+}
+
+submit()
+{
+    if [[ "$OS" = *"Linux"* ]]; then
+        cowsay "You don't need this submit function."
+        return
+    fi
+    set -- "${1%.cpp}"
+    set -- "${1/%/.cpp}"
+    cp $1 ~/Desktop/Work/cpp/submissions/${1}
+    sed -i '' '1s/#include.*/#include <bits\/stdc++.h>/g' ~/Desktop/Work/cpp/submissions/${1}
 }
 
 export OS=`uname`
