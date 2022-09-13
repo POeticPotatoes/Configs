@@ -54,7 +54,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 call plug#end()
 
-colorscheme  tokyonight
+colorscheme  onehalfdark
 
 " trigger `autoread` when files changes on disk
 autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
@@ -90,6 +90,9 @@ autocmd TermClose * if !v:event.status | exe 'bdelete! '..expand('<abuf>') | end
 
 " Terminal that changes to the correct working directory
 function Terminal() 
+    if &ft =~ 'nerdtree'
+        wincmd l
+    endif
     let g:working_dir = expand('%:h')
     rightbelow sb
     terminal
