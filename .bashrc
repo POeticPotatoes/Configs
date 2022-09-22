@@ -8,6 +8,33 @@ dotnetbuilder()
     ~/scripts/cbuilder.sh
 }
 
+brightness()
+{
+    xrandr --output DP-0 --brightness $1
+}
+
+compile()
+{
+    set -- "${1}" "${@: -1}"
+    set -- "${1}" "${2%.cpp}"
+    g++ -std=c++17 -Wshadow -Wall -o "${2}.out" "${2}.cpp" -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
+    echo Compiled: ${2}.out
+    if [[ "$OS" = *"Darwin"* ]]; then
+        echo "Ptweh! What's this, a mac user!?"
+        rm -r "${2}.out.dSYM"
+    fi
+    while getopts ":a" opt; do
+      case $opt in
+        a)
+          ./${2}.out
+          ;;
+        \?)
+          echo "Invalid option: -$OPTARG" >&2
+          ;;
+      esac
+    done
+}
+
 runcpp()
 {
     set -- "${1%.cpp}"
@@ -55,9 +82,10 @@ repo()
     if [[ "$OS" = *"Darwin"* ]]; then
         echo "Bleaugh! Weird mac syntax..."
         open https://github.com/POeticPotatoes/${1}
-        return
+        exit
     fi
     xdg-open https://github.com/POeticPotatoes/${1}
+    exit
 }
 
 solution()
