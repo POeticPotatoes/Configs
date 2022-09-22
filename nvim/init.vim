@@ -1,11 +1,12 @@
+set nocompatible
 set showmatch
 set autoread
-set ignorecase
 set hlsearch
 set wildmode=longest, list
 set mouse=a
 set encoding=UTF-8
 set noswapfile
+set ignorecase
 set autoindent
 set tabstop=4
 set expandtab
@@ -20,6 +21,9 @@ set number
 let g:mkdp_auto_start = 0
 let g:mkdp_auto_close = 0
 let g:mkdp_theme = 'dark'
+
+" Custom terminal management
+let g:compile_string = 'cat '
 
 " NERDTree settings
 let NERDTreeShowLineNumbers=1
@@ -67,59 +71,94 @@ lua <<END
   require('lualine').setup()
 END
 
-" Convenient mappings
-inoremap { {}<left>
-inoremap {<Esc> {<Esc>
-inoremap {<Enter> {<CR>}<Esc>ko
-inoremap $$ $$<left>
-nnoremap <silent> <Esc> :noh<cr>
-nnoremap <silent> <Space><Space> :source ~/.config/nvim/init.vim<cr> | echo 'Reloaded config.'
-nnoremap <C-t> :call Terminal()<cr> |
-tnoremap <Esc> <C-\><C-n>
-tnoremap <C-w> <C-\><C-n><C-w>
-nnoremap <C-c> :call Compile()<cr>
-
 " Commands for specific actions
-command Mdp MarkdownPreview
 command Terminal call Terminal()
 command Compile call Compile()
 command ReloadMappings call DoMappings()
 
-autocmd FileType markdown 
+autocmd TermClose * exe 'bdelete! '..expand('<abuf>') | call DoMappings()
 autocmd BufEnter * call DoMappings()
-autocmd TermClose * if !v:event.status | exe 'bdelete! '..expand('<abuf>') | endif
 
 " Terminal that changes to the correct working directory
 function Terminal() 
-    if &ft =~ 'nerdtree'
-        wincmd l
+    wincmd j
+    if &ft == ''
+        call feedkeys("\<C-c>clear\<Enter>")
+        return
     endif
-    let g:working_dir = expand('%:h')
     rightbelow sb
     terminal
-    call feedkeys("asource ~/.bashrc\<Enter>cd ".g:working_dir."\<Enter>clear\<Enter>")
+    call feedkeys("\<C-c>source ~/.bashrc\<Enter>cd ".g:working_dir."\<Enter>clear\<Enter>")
 endfunction
 
 " Opens terminal and prepares to compile the current file
 function Compile()
-    if &ft != 'cpp'
-        echo "Non-cpp files cannot be compiled"
+    if g:compile_string == ''
+        echo 'This filetype is not supported yet'
         return
     endif
-    let g:working_file = expand("%:t")
-    call Terminal()
-    call feedkeys("compile -a ".g:working_file."\<Enter>")
+    Terminal
+    call feedkeys(g:compile_string.g:working_file."\<Enter>")
+endfunction
+
+" Returns the compile string for a filetype.
+" Uses my custom .bashrc commands
+function GetCompileCommand()
+    if &ft == ''
+        return g:compile_string
+    endif
+    if &ft =~ 'cpp'
+        return 'runcpp '
+    endif
+    if &ft =~ 'python'
+        return 'python '
+    endif
+    if &ft =~ 'c'
+        return 'runc '
+    endif
+    if &ft =~ 'java'
+        return 'java '
+    endif
+    return ''
 endfunction
 
 " Remaps all keys for the current buffer
 function DoMappings()
     silent! unmap <lt>img
     silent! unmap :q<Enter>
+    nnoremap <C-r> <nop>
+    " Ctrl-r recompiles and runs a file
+    nnoremap <silent> <C-r> :Compile<Enter>
+    if &ft == ''
+        nnoremap <C-c> a<C-c>
+        if mode() == 'n'
+            call feedkeys("a")
+        endif
+        return
+    endif
     if &ft =~ 'markdown'
         inoremap <img <lt>br><lt>img src="" style="width:auto;display:block;margin:auto"><lt>br> <Esc>?""<Enter>a
         inoremap __ \_\_<lt>ins>()<lt>/ins>\_\_<Esc>/()<Enter>a
+
+        " Markdown-specific behaviour
+        nnoremap <silent> <C-r> :MarkdownPreview<cr>
     endif
-    if &ft == ''
-        nnoremap :q<Enter>aclear<Enter>exit<Enter>
+    if &ft != 'nerdtree'
+        let g:compile_string = GetCompileCommand() |
+        let g:working_file = expand("%:t")
+        let g:working_dir = expand('%:h')
     endif
 endfunction
+
+" Convenient mappings
+inoremap { {}<left>
+inoremap {<Esc> {<Esc>
+inoremap {<Enter> {<CR>}<Esc>ko
+inoremap $$ $$<left>
+nnoremap <silent> <Esc> :noh<cr>
+tnoremap <Esc> <C-\><C-n>
+tnoremap <C-w> <C-\><C-n><C-w>
+
+nnoremap <silent> <Space><Space> :source ~/.config/nvim/init.vim<cr> | echo 'Reloaded config.'
+nnoremap <C-t> :call Terminal()<cr> |
+tnoremap <silent> <C-r> <C-\><C-n>:Compile<cr>
