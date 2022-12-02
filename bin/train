@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+nvim --cmd "let g:training=1" $1

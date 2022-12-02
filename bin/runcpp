@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+set -- "${1%.cpp}"
+set -- "${1%.}"
+compilecpp ${1}
+if [[ "$OS" = *"Darwin"* ]]; then
+    echo "Ptweh! What's this, a mac user!?"
+    rm -r "${1}.out.dSYM"
+fi
+./${1}.out

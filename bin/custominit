@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+# Custom commands for archlinux
 
 if (( $(xrandr -q | grep -c " connected ") > 1 ));
 then
@@ -8,5 +9,4 @@ else
     echo "One screen found. Assuming a connection of DP-0."
     xrandr --output DP-0 --primary --pos 1200x420 --rotate normal --mode 1920x1080 --rate 144
 fi
-nitrogen --restore
-
+randomwallpaper -r &

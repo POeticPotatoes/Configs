@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+set -- "${1%.c}"
+set -- "${1%.}"
+compilec ${1}
+./${1}.out

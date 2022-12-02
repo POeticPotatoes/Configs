@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+# Header for new scripts
+
+printf "#!/usr/bin/bash\n\n" >> $1

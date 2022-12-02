@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+set -- "${1%.in}"
+set -- "${1%.cpp}"
+cat ${1}.in | runcpp $1

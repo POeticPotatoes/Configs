@@ -1,0 +1,45 @@
+#!/usr/bin/bash
+
+# Set a random wallpaper from my wallpaper folder
+
+WALLPAPER_SETTER_PID=$(pidof -o %PPID -x $0)
+WALLPAPER_ROTATION=0
+
+while getopts ":r:k" opt; do
+  case $opt in
+    r)
+      WALLPAPER_ROTATION=$OPTARG
+      ;;
+    k)
+      kill $WALLPAPER_SETTER_PID
+      echo "Killed wallpaper setter. PID: $WALLPAPER_SETTER_PID"
+      exit 1
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      WALLPAPER_ROTATION=600
+      ;;
+  esac
+done
+
+if [ "$WALLPAPER_ROTATION" -eq "0" ]; then 
+  nitrogen --set-zoom-fill --random ~/wallpapers --save
+  exit 1;
+fi;
+
+echo "Wallpaper will rotate every $WALLPAPER_ROTATION seconds."
+if [ ! -z "$WALLPAPER_SETTER_PID" ]; then
+  echo "Found an existing wallpaper setter with PID $WALLPAPER_SETTER_PID. Killing task."
+  kill $WALLPAPER_SETTER_PID
+fi
+
+export WALLPAPER_SETTER_PID=$BASHPID
+echo "Starting a new wallpaper setter"
+echo "PID: $WALLPAPER_SETTER_PID"
+while [ "$WALLPAPER_ROTATION" -ne "0" ]; do
+  nitrogen --set-zoom-fill --random ~/wallpapers --save
+  sleep $WALLPAPER_ROTATION
+done

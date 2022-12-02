@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+g++ -std=c++17 -Wshadow -Wall -o "${1}.out" "${1}.cpp" -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
+echo Compiled: ${1}.out

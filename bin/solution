@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+# Compile commands for c++ scripts
+# Used in competitive programming
+
+set -- "${1%.cpp}"
+cat ~/.template.cpp > ${1}.cpp
+echo "Created new solution: ${1}.cpp"
