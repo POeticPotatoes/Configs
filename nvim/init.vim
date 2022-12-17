@@ -1,6 +1,10 @@
+" === init.vim ===
+" Loads all required plugins and sources files
+" Call nvim with g:training for a training environment
+"
+" Convenient mappings (Used even in ICPC)
 set nocompatible
 set showmatch
-set autoread
 set hlsearch
 set noswapfile
 set ignorecase
@@ -9,21 +13,24 @@ set tabstop=4
 set expandtab
 set shiftwidth=4
 set softtabstop=4
-set statusline+=%F
-set encoding=UTF-8
 set relativenumber
-set shell=bash\ -l
 set number
-autocmd!
 
-" Convenient mappings
 inoremap { {}<left>
 inoremap {<BS> <nop>
 inoremap {} {}
 inoremap {<Esc> {<Esc>
 inoremap {<Enter> {<CR>}<Esc>ko
 nnoremap <silent> <Esc> :noh<cr>
+
+" Subsequent commands are not called during ICPC training
 if exists("g:training") | finish | endif
+
+set shell=bash\ -l
+set statusline+=%F
+set encoding=UTF-8
+set autoread
+autocmd!
 
 set mouse=a
 source ~/.config/nvim/compiler.vim
@@ -31,7 +38,6 @@ source ~/.config/nvim/markdown.vim
 source ~/.config/nvim/nerdtree.vim
 source ~/.config/nvim/keybinds.vim
 
-" Plugged programs
 call plug#begin("~/.vim/plugged")
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'scrooloose/nerdtree'

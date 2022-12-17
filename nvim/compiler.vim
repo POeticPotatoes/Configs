@@ -1,6 +1,7 @@
-nnoremap <silent> <Space><Space> :source ~/.config/nvim/init.vim<cr> | echo 'Reloaded config.'
+" === compiler.vim ===
+" Provides terminal support and quick compilation features
+
 nnoremap <silent> <C-t> :call Terminal()<cr>
-nnoremap <silent> <C-p> :call CreateTest()<cr>
 
 command Terminal call Terminal()
 command Compile call Compile()
@@ -9,10 +10,9 @@ command ReloadMappings call DoMappings()
 autocmd TermClose * q | call DoMappings()
 autocmd BufEnter * call DoMappings()
 
-" =============================================
 let g:compile_string = 'cat '
 
-" Terminal that changes to the correct working directory
+" Opens a terminal in the correct directory
 function Terminal() 
     wincmd j
     if &buftype == 'terminal'
@@ -27,7 +27,7 @@ function Terminal()
     call feedkeys("source ~/.bashrc\<Enter>cd ".g:working_dir."\<Enter>clear\<Enter>")
 endfunction
 
-" Opens terminal and prepares to compile the current file
+" Prepares to compile the current file
 function Compile()
     if g:compile_string == ''
         echo 'This filetype is not supported yet'
@@ -39,7 +39,7 @@ function Compile()
 endfunction
 
 " Returns the compile string for a filetype.
-" Uses my custom .bashrc commands
+" Uses custom bash commands
 function GetCompileCommand()
     if &ft == ''
         return g:compile_string
@@ -66,7 +66,8 @@ endfunction
 function DoMappings()
     silent! unmap <lt>img
     silent! unmap :q<Enter>
-    " Ctrl-c recompiles and runs a file
+    nnoremap <silent> <C-p> :call CreateTest()<cr>
+    " Ctrl-g recompiles and runs a file
     nnoremap <silent> <C-g> :Compile<cr>
     if &buftype =~ 'terminal'
         nnoremap <C-c> a<C-c>
@@ -75,8 +76,7 @@ function DoMappings()
     endif
     if &ft =~ 'markdown'
         inoremap <img <lt>br><lt>img src="" style="width:auto;display:block;margin:auto"><lt>br> <Esc>?""<Enter>a
-        inoremap __ \_\_<lt>ins>()<lt>/ins>\_\_<Esc>/()<Enter>a
-
+        nnoremap <silent> <C-p> :call Print()<cr>
         " Markdown-specific behaviour
         nnoremap <silent> <C-g> :MarkdownPreview<cr>
     endif
@@ -87,6 +87,7 @@ function DoMappings()
     endif
 endfunction
 
+" Create a .in test file for the current file
 function CreateTest()
     tabnew
     execute "cd" g:working_dir
