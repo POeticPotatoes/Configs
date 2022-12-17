@@ -13,8 +13,8 @@ template <typename T>
 using vv = vector<vector<T>>;
 template <typename T>
 using vvv = vector<vv<T>>;
-#define FOR(i, a, b) for (ll (i) = (a); (i) < (b); (i)++)
-#define ROF(i, a, b) for (ll (i) = (a); (i) > (b); (i)--)
+#define FOR(i, a, b) for (ll i = (a); (i) < (b); (i)++)
+#define ROF(i, a, b) for (ll i = (a); (i) > (b); (i)--)
 #define REP(i, n) FOR(i, 0, (n))
 #define all(x) (x).begin(), (x).end()
 #define eb emplace_back
