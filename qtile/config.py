@@ -8,7 +8,7 @@ import widgets, os, subprocess
 groups = [Group(i) for i in group_names]
 
 layouts = [
-    layout.Columns(border_focus=["#8EA8C3"], border_normal=["#333333"], border_on_single=True, border_width=1, margin = 11),
+    layout.Columns(border_focus=["#8EA8C3"], border_normal=["#333333"], grow_amount=14, border_on_single=True, border_width=1, margin = 11),
     # layout.Max(),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -30,27 +30,27 @@ def call_custominit():
     home = os.path.expanduser("/usr/local/bin/custominit")
     subprocess.call([home])
 
-applications = ["codeforces", "discord", "whatsapp", "telegram", "nitrogen"]
+applications = ["codeforces", "translate", "whatsapp", "telegram", "nitrogen"]
 bind_applications(applications)
 
 bar1 = bar.Bar(
-        [widgets.group_space(bar_colors[2])]
-        + widgets.application_bar(["codeforces", "discord", "whatsapp", "telegram", "nitrogen"], left=None)
-        + widgets.windowName()
+        [widgets.group_space(bar_colors[3])]
+        + widgets.homeBar(left=None, end=4, right=bar_colors[2])
+        + widgets.application_bar(applications, left=None)
         + [widget.Spacer()]
-        + widgets.homeBar(right=bar_colors[2], end=4)
+        + widgets.windowName(right=bar_colors[2])
         + widgets.prompt(left=None)
         + [widget.Spacer()]
-        + widgets.brightness()
         + widgets.soundbar()
+        + widgets.brightness()
         + widgets.clock(right=None)
-        + widgets.power_button(left=bar_colors[3],right=None)
+        + widgets.power_button(left=bar_colors[3], right=None)
         ,
         26,
         background = bar_colors[0],
-        margin = [0, 0, 4, 0])
+        margin = [13, 0, 0, 0])
 
-screens = [Screen(bottom=bar1)]
+screens = [Screen(top=bar1)]
 
 # Drag floating layouts.
 dgroups_key_binder = None

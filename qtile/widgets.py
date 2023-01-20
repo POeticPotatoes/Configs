@@ -1,7 +1,7 @@
 from devicons import file_node_extensions
 from libqtile import bar, widget, qtile
 from groups import group_names
-from theme import bar_colors, c1, c2, widget_defaults
+from theme import bar_colors, c1, c2, c3, widget_defaults
 
 def circle_end(color, bg=bar_colors[0], flip=False):
     if flip:
@@ -88,7 +88,7 @@ def homeBar(left=bar_colors[0], right=bar_colors[0], start=0, end=len(group_name
             widget.TextBox(
                 text=symbols[6],
                 fontsize=20,
-                foreground=color[1],
+                foreground=c3,
                 background=color[0],
                 mouse_callbacks = {
                     'Button1': lambda: qtile.cmd_spawn("alacritty -e repo")},
@@ -97,7 +97,7 @@ def homeBar(left=bar_colors[0], right=bar_colors[0], start=0, end=len(group_name
             widget.GroupBox(
                 highlight_method='line',
                 hide_unused=False, 
-                inactive="EEDDBB",
+                inactive=c3,
                 active=c1,
                 highlight_color=bar_colors[5],
                 max_chars=100,
@@ -117,6 +117,21 @@ def prompt(left=bar_colors[0], right=bar_colors[0]):
 
 
 def soundbar(left=bar_colors[0], right=bar_colors[0]):
+    color = [bar_colors[1], bar_colors[2]];
+    return (application(
+                "",
+                "setaudio Samson_G-Track_Pro",
+                "", 
+                color=color[0], font_color=c2, font_size=18, left=left,right=None)
+            + [group_space(color[0], width=5)]
+            + [group_space(color[1], width=3)]
+            + application(
+                "蓼",
+                "setaudio HiFi__hw_Audio__sink",
+                "",
+                color=color[1], font_size=20, left=None, right=right))
+
+def volume(left=bar_colors[0], right=bar_colors[0]):
     color = bar_colors[1]
     return widget_template([
         widget.PulseVolume(
@@ -176,6 +191,7 @@ applications = {
         'telegram': ("", "xdg-open https://web.telegram.org", ""),
         'discord': ("ﭮ", "xdg-open https://discord.com/app", "",20),
         'whatsapp': ("", "xdg-open https://web.whatsapp.com", "",20),
+        'translate': ("", "xdg-open https://translate.google.com", "",20),
         'codeforces': (file_node_extensions["cpp"], "xdg-open https://codeforces.com/submissions/POeticPotato", "",20),
         }
 

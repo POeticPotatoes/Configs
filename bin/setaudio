@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+audio=$(pactl list short sinks | grep "${1}")
+echo "Setting sink to index ${audio:0:1}"
+pacmd set-default-sink ${audio:0:1}

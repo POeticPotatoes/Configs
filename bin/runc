@@ -1,4 +1,6 @@
 #!/usr/bin/bash
 
-gcc ${1}.c -o ${1}.out -lm
-echo Compiled: ${1}.out
+set -- "${1%.c}"
+set -- "${1%.}"
+compilec ${1}
+./${1}.out
