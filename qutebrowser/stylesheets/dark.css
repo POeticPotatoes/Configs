@@ -1,0 +1,44 @@
+* {
+	background-color: #222 !important;
+	color: #aaa !important;
+}
+body {
+	background-color: #222 !important;
+	color: #aaa !important;
+}
+
+.simple-print {
+	fill: white;
+	stroke: white;
+}
+
+.simple-close {
+	color: white;
+	border-color: white;
+}
+
+p {
+	font-size: 16px;
+}
+
+h1 {
+	font-size: 30px;
+	line-height: 34px;
+}
+
+h2 {
+	font-size: 20px;
+	line-height: 25px;
+}
+
+hr {
+	background-color: #666 !important;
+}
+
+a[href] {
+	color: #1e8ad6;
+}
+
+a[href]:hover {
+	color: #3ba0e6;
+}
