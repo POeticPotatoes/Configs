@@ -1,7 +1,7 @@
 from libqtile.config import Key, Drag, Click, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from groups import group_names
+from groups import groups, group_names
 from widgets import applications
 
 mod = "mod4"
@@ -48,19 +48,35 @@ keys = [
     Key([mod], "f", lazy.window.toggle_floating(), desc='Toggle floating')
 ]
 
-for i, group in enumerate(group_names, 1):
-    keys.extend(
-        [
-            Key( [mod], str(i),
-                lazy.group[group].toscreen(),
-                desc="Switch to group {}".format(group),
-            ),
-            Key( [mod, "shift"], str(i),
-                lazy.window.togroup(group, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(group),
-            ),
-        ]
-    )
+def switch_group(index, screen):
+    def f(qtile):
+        qtile.cmd_to_screen(screen)
+        qtile.current_screen.set_group(qtile.groups[index])
+    return f;
+
+def change_group(group, index, screen):
+    def f(qtile):
+        qtile.current_window.togroup(group)
+        qtile.cmd_to_screen(screen)
+        qtile.current_screen.set_group(qtile.groups[index])
+    return f;
+
+i = 0;
+for s, gg in enumerate(group_names):
+    for g in gg:
+        keys.extend(
+            [
+                Key( [mod], str(i+1),
+                    lazy.function(switch_group(i, s)),
+                    desc="Switch to group {}".format(g),
+                ),
+                Key( [mod, "shift"], str(i+1),
+                    lazy.function(change_group(g, i, s)),
+                    desc="Switch to & move focused window to group {}".format(g),
+                ),
+            ]
+        )
+        i += 1
 
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),

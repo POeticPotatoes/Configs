@@ -1,6 +1,5 @@
 from devicons import file_node_extensions
 from libqtile import bar, widget, qtile
-from groups import group_names
 from theme import bar_colors, c1, c2, c3, widget_defaults
 
 def circle_end(color, bg=bar_colors[0], flip=False):
@@ -78,17 +77,17 @@ def windowName(left=bar_colors[0], right=bar_colors[0]):
                 max_chars=60,
                 background=color,
                 foreground=c2,
-                empty_group_string="PLAYERNAME. Player of games."),
+                empty_group_string="Victory Belongs to the Most Tenacious"),
         ], color, left, right)
  
 symbols = ["🖧", "☣", "☔", "⛈", "", "", "", "", ""]
-def homeBar(left=bar_colors[0], right=bar_colors[0], start=0, end=len(group_names)):
+def homeBar(groups, left=bar_colors[0], right=bar_colors[0]):
     color = [bar_colors[3],bar_colors[2]]
     return widget_template([
             widget.TextBox(
                 text=symbols[6],
                 fontsize=20,
-                foreground=c3,
+                foreground=bar_colors[1],
                 background=color[0],
                 mouse_callbacks = {
                     'Button1': lambda: qtile.cmd_spawn("alacritty -e repo")},
@@ -100,8 +99,9 @@ def homeBar(left=bar_colors[0], right=bar_colors[0], start=0, end=len(group_name
                 inactive=c3,
                 active=c1,
                 highlight_color=bar_colors[5],
+                disable_drag=True,
                 max_chars=100,
-                visible_groups=group_names[start:end],
+                visible_groups=groups,
                 background=color[0]),
         ], color[0], left, right)
 

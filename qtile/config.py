@@ -1,11 +1,9 @@
-from libqtile import bar, layout, widget, qtile, hook
-from libqtile.config import Group, Match, Screen
+from libqtile import bar, layout, widget, hook
+from libqtile.config import Match, Screen
 from theme import bar_colors
-from keybinds import keys, mouse, mod, bind_applications
+from keybinds import groups, keys, mouse, mod, bind_applications
 from groups import group_names
 import widgets, os, subprocess
-
-groups = [Group(i) for i in group_names]
 
 layouts = [
     layout.Columns(border_focus=["#8EA8C3"], border_normal=["#333333"], grow_amount=14, border_on_single=True, border_width=1, margin = 11),
@@ -34,15 +32,15 @@ applications = ["codeforces", "translate", "whatsapp", "telegram", "nitrogen"]
 bind_applications(applications)
 
 bar1 = bar.Bar(
-        [widgets.group_space(bar_colors[3])]
-        + widgets.homeBar(left=None, end=4, right=bar_colors[2])
-        + widgets.application_bar(applications, left=None)
-        + [widget.Spacer()]
-        + widgets.windowName(right=bar_colors[2])
-        + widgets.prompt(left=None)
-        + [widget.Spacer()]
+        # [widgets.group_space(bar_colors[3])]
+        widgets.application_bar(applications)
         + widgets.soundbar()
         + widgets.brightness()
+        + [widget.Spacer()]
+        + widgets.homeBar(group_names[0], right=None)
+        + widgets.windowName(right=bar_colors[2], left=bar_colors[3])
+        + widgets.prompt(left=None)
+        + [widget.Spacer()]
         + widgets.clock(right=None)
         + widgets.power_button(left=bar_colors[3], right=None)
         ,
@@ -50,7 +48,18 @@ bar1 = bar.Bar(
         background = bar_colors[0],
         margin = [13, 0, 0, 0])
 
-screens = [Screen(top=bar1)]
+bar2 = bar.Bar(
+        [widget.Spacer()]
+        + widgets.homeBar(group_names[1], right=None)
+        + widgets.windowName(left=bar_colors[3])
+        + [widget.Spacer(length=370)]
+        + [widget.Spacer()]
+        ,
+        26,
+        background = bar_colors[0],
+        margin = [13, 0, 0, 0])
+
+screens = [Screen(top=bar1), Screen(top=bar2)]
 
 # Drag floating layouts.
 dgroups_key_binder = None
