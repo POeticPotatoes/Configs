@@ -1,15 +1,19 @@
 from libqtile.config import Group
+from settings import screen_settings
 
 group_names = [[
     "HOM",
-    "CHR",
-    "DOC",
-    "MUS",
+    "FRF",
+    "DEV",
     ],[
+    "SC4",
     "SC5",
     "SC6",
-    "SC7"
+    "QPW",
     ]]
 
-groups = [Group(i) for g in group_names for i in g]
+groups = [Group(n) for g in group_names for n in g]
 
+def get_groups(id):
+    if (screen_settings["force-show-groups"]): return [n for g in group_names for n in g]
+    return group_names[id]

@@ -2,7 +2,23 @@ from libqtile.config import Key, Drag, Click, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from groups import groups, group_names
-from widgets import applications
+#from widgets import applications
+from libqtile import qtile
+# from settings import screen_settings, save_settings
+
+# def switch_group(index, screen):
+#     def f(qtile):
+#         if (screen_settings["force-switch-screen"]): qtile.cmd_to_screen(screen)
+#         qtile.current_screen.set_group(qtile.groups[index])
+#     return f;
+# 
+# def change_group(group, index, screen):
+#     def f(qtile):
+#         qtile.current_window.togroup(group)
+#         if (screen_settings["force-switch-screen"]): qtile.cmd_to_screen(screen)
+#         qtile.current_screen.set_group(qtile.groups[index])
+#     return f;
+
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -43,23 +59,10 @@ keys = [
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key([mod, "shift"], "r", lazy.spawn("alacritty -e repo"), desc="Open a github repository"),
     Key([], "Print", lazy.spawn("scrot /home/poeticpotato/screenshots/%Y-%m-%d-%T-screenshot.png")),
-    Key(["shift"], "Print", lazy.spawn("import /home/poeticpotato/screenshots/area.png")),
+    Key(["shift"], "Print", lazy.spawn("area")),
     Key([mod], 'period', lazy.next_screen(), desc='Next monitor'),
     Key([mod], "f", lazy.window.toggle_floating(), desc='Toggle floating')
 ]
-
-def switch_group(index, screen):
-    def f(qtile):
-        qtile.cmd_to_screen(screen)
-        qtile.current_screen.set_group(qtile.groups[index])
-    return f;
-
-def change_group(group, index, screen):
-    def f(qtile):
-        qtile.current_window.togroup(group)
-        qtile.cmd_to_screen(screen)
-        qtile.current_screen.set_group(qtile.groups[index])
-    return f;
 
 i = 0;
 for s, gg in enumerate(group_names):
@@ -67,11 +70,13 @@ for s, gg in enumerate(group_names):
         keys.extend(
             [
                 Key( [mod], str(i+1),
-                    lazy.function(switch_group(i, s)),
+                    lazy.group[g].toscreen(),
+                    #lazy.function(switch_group(i, s)),
                     desc="Switch to group {}".format(g),
                 ),
                 Key( [mod, "shift"], str(i+1),
-                    lazy.function(change_group(g, i, s)),
+                    #lazy.function(change_group(g, i, s)),
+                    lazy.window.togroup(g, switch_group=True),
                     desc="Switch to & move focused window to group {}".format(g),
                 ),
             ]
@@ -84,13 +89,13 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
-def bind_applications(apps):
-    global keys
-    a = []
-    for i, app in enumerate(apps,1):
-        a.extend([
-            Key([], str(i), 
-                lazy.spawn(applications[app][1]),
-                desc="Open {}".format(app),
-                )])
-    keys.extend([KeyChord([mod], "a", a)])
+# def bind_applications(apps):
+#     global keys
+#     a = []
+#     for i, app in enumerate(apps,1):
+#         a.extend([
+#             Key([], str(i), 
+#                 lazy.spawn(applications[app][1]),
+#                 desc="Open {}".format(app),
+#                 )])
+#     keys.extend([KeyChord([mod], "a", a)])

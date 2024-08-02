@@ -1,0 +1,4 @@
+screens:
+  force-show-groups: false
+  force-switch-screen: true
+  main-screen: DP-0
